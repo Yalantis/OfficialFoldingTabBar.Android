@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/ftb_menu_nearby"
+        android:icon="@drawable/ic_nearby_icon"
+        android:title="Nearby"/>
+
+    <item
+        android:id="@+id/ftb_menu_new_chat"
+        android:icon="@drawable/ic_new_chat_icon"
+        android:title="Chat"/>
+
+    <item
+        android:id="@+id/ftb_menu_profile"
+        android:icon="@drawable/ic_profile_icon"
+        android:title="Profile"/>
+
+    <item
+        android:id="@+id/ftb_menu_settings"
+        android:icon="@drawable/ic_settings_icon"
+        android:title="Settings"/>
+
+</menu>

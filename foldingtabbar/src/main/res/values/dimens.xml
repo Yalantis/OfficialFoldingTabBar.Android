@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="ftb_size_mini">50dp</dimen>
+    <dimen name="ftb_size_normal">70dp</dimen>
+    <dimen name="ftb_item_padding">17dp</dimen>
+    <dimen name="ftb_default_radius">60dp</dimen>
+</resources>

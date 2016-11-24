@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="FoldingTabBar">
+        <attr name="menu" format="reference"/>
+        <attr name="itemPadding" format="dimension"/>
+        <attr name="mainImage" format="reference"/>
+        <attr name="selectionColor" format="color"/>
+    </declare-styleable>
+</resources>
