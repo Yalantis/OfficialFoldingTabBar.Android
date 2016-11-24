@@ -22,9 +22,11 @@ class SelectedMenuItem : ImageView {
 
     constructor(context: Context, attrs: AttributeSet?, @ColorRes color: Int) : this(context, attrs, 0, color)
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleRes: Int, @ColorRes color: Int) : super(context, attrs, defStyleRes) {
-        mCirclePaint = Paint(ANTI_ALIAS_FLAG)
-        mCirclePaint.color = ResourcesCompat.getColor(resources, color, null)
+    constructor(context: Context, attrs: AttributeSet?, defStyleRes: Int, @ColorRes color: Int)
+    : super(context, attrs, defStyleRes) {
+        mCirclePaint = Paint(ANTI_ALIAS_FLAG).apply {
+            this.color = ResourcesCompat.getColor(resources, color, null)
+        }
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -38,14 +40,10 @@ class SelectedMenuItem : ImageView {
      * Here we are making scale drawing of selection
      * */
     private fun drawCircleIcon(canvas: Canvas) {
+        canvas.drawCircle(canvas.width / 2.0f, canvas.height - paddingBottom / 1.5f, radius, mCirclePaint)
         if (radius <= canvas.width / 20.0f) {
-            canvas.drawCircle(canvas.width / 2.0f, canvas.height - paddingBottom / 1.5f, radius, mCirclePaint)
-            if (radius != canvas.width / 20.0f) {
-                radius++
-                invalidate()
-            } else {
-                radius = 0f
-            }
+            radius++
+            invalidate()
         }
     }
 }
