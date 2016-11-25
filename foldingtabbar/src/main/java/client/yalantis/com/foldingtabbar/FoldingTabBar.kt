@@ -2,12 +2,12 @@ package client.yalantis.com.foldingtabbar
 
 import android.animation.Animator
 import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Context
 import android.content.res.TypedArray
 import android.os.Parcel
 import android.os.Parcelable
+import android.support.annotation.MenuRes
 import android.support.v7.view.SupportMenuInflater
 import android.support.v7.view.menu.MenuBuilder
 import android.support.v7.view.menu.MenuItemImpl
@@ -32,8 +32,6 @@ class FoldingTabBar : LinearLayout {
     private val ITEM_ROTATION_END = 360f
     private val ROLL_UP_ROTATION_START = -45f
     private val ROLL_UP_ROTATION_END = 360f
-    private val BOUNCE_AMPLITUDE = 0.1
-    private val BOUNCE_FREQUENCY = 0.8
 
     var onFoldingItemClickListener: OnFoldingItemSelectedListener? = null
     var onMainButtonClickListener: OnMainButtonClickedListener? = null
@@ -60,7 +58,8 @@ class FoldingTabBar : LinearLayout {
 
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleRes: Int) : super(context, attrs, defStyleRes) {
+    constructor(context: Context, attrs: AttributeSet?, defStyleRes: Int)
+    : super(context, attrs, defStyleRes) {
         mMenu = MenuBuilder(context)
         gravity = Gravity.CENTER
 
@@ -76,10 +75,10 @@ class FoldingTabBar : LinearLayout {
     /**
      * Initializing attributes
      */
-    private fun initAttrs(attrs: AttributeSet?, defStyleRes: Int)
-            = context.obtainStyledAttributes(attrs,
-            R.styleable.FoldingTabBar, 0,
-            defStyleRes)
+    private fun initAttrs(attrs: AttributeSet?, defStyleRes: Int) =
+            context.obtainStyledAttributes(attrs,
+                    R.styleable.FoldingTabBar, 0,
+                    defStyleRes)
 
     /**
      * Here is size of our FoldingTabBar. Simple
@@ -98,8 +97,7 @@ class FoldingTabBar : LinearLayout {
      * and animation sets
      */
     private fun initViewTreeObserver(a: TypedArray) {
-        val vto = viewTreeObserver
-        vto.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+        viewTreeObserver.addOnPreDrawListener(object: ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {
                 viewTreeObserver.removeOnPreDrawListener(this)
                 isAnimating = true
@@ -146,27 +144,34 @@ class FoldingTabBar : LinearLayout {
 
         val rotationSet = AnimatorSet()
         val scalingSet = AnimatorSet()
-        val scalingAnimator = ValueAnimator.ofInt(mSize, destWidth)
-        val rotationAnimator = ValueAnimator.ofFloat(MAIN_ROTATION_START, MAIN_ROTATION_END)
 
-        scalingAnimator.addUpdateListener(scaleAnimator)
-        scalingAnimator.addListener(rollUpListener)
-
-        mData.forEach {
-            val scaleX = ObjectAnimator.ofFloat(it, View.SCALE_X, 0f, 1f)
-            val scaleY = ObjectAnimator.ofFloat(it, View.SCALE_Y, 0f, 1f)
-            val rotateAnimation = ObjectAnimator.ofFloat(it, View.ROTATION, ITEM_ROTATION_START, ITEM_ROTATION_END)
-            scaleX.addListener(expandingListener)
-            rotationSet.playTogether(scaleX, scaleY, rotateAnimation)
+        val scalingAnimator = ValueAnimator.ofInt(mSize, destWidth).apply {
+            addUpdateListener(scaleAnimator)
+            addListener(rollUpListener)
         }
-        rotationAnimator.addUpdateListener {
-            valueAnimator ->
-            val value = valueAnimator.animatedValue as Float
-            mainImageView.rotation = value
+
+        val rotationAnimator = ValueAnimator.ofFloat(MAIN_ROTATION_START, MAIN_ROTATION_END).apply {
+            addUpdateListener { valueAnimator ->
+                val value = valueAnimator.animatedValue as Float
+                mainImageView.rotation = value
+            }
+        }
+
+        mData.forEach { item ->
+            ValueAnimator.ofFloat(ITEM_ROTATION_START, ITEM_ROTATION_END).apply {
+                addUpdateListener {
+                    val fraction = it.animatedFraction
+                    item.scaleX = fraction
+                    item.scaleY = fraction
+                    item.rotation = it.animatedValue as Float
+                }
+                addListener(expandingListener)
+                rotationSet.playTogether(this)
+            }
         }
 
         scalingSet.playTogether(scalingAnimator, rotationAnimator)
-        scalingSet.interpolator = CustomBounceInterpolator(BOUNCE_AMPLITUDE, BOUNCE_FREQUENCY)
+        scalingSet.interpolator = CustomBounceInterpolator()
         rotationSet.interpolator = BounceInterpolator()
 
         rotationSet.startDelay = START_DELAY
@@ -182,7 +187,6 @@ class FoldingTabBar : LinearLayout {
         val destWidth = mMenu.size().times(mSize)
 
         val rotationSet = AnimatorSet()
-        val scalingSet = AnimatorSet()
 
         val scalingAnimator = ValueAnimator.ofInt(destWidth, mSize)
         val rotationAnimator = ValueAnimator.ofFloat(ROLL_UP_ROTATION_START, ROLL_UP_ROTATION_END)
@@ -190,15 +194,17 @@ class FoldingTabBar : LinearLayout {
         scalingAnimator.addUpdateListener(scaleAnimator)
         mRollupSet.addListener(rollUpListener)
 
-        rotationAnimator.addUpdateListener {
-            valueAnimator ->
+        rotationAnimator.addUpdateListener { valueAnimator ->
             val value = valueAnimator.animatedValue as Float
             mainImageView.rotation = value
         }
 
-        scalingSet.playTogether(scalingAnimator, rotationAnimator)
-        scalingSet.interpolator = CustomBounceInterpolator(BOUNCE_AMPLITUDE, BOUNCE_FREQUENCY)
+        val scalingSet = AnimatorSet().apply {
+            playTogether(scalingAnimator, rotationAnimator)
+            interpolator = CustomBounceInterpolator()
+        }
         rotationSet.interpolator = BounceInterpolator()
+
 
         mRollupSet.playTogether(scalingSet, rotationSet)
     }
@@ -211,7 +217,7 @@ class FoldingTabBar : LinearLayout {
      *
      * @param resId your menu resource id
      */
-    private fun inflateMenu(resId: Int) {
+    private fun inflateMenu(@MenuRes resId: Int) {
         getMenuInflater().inflate(resId, mMenu)
         if (mMenu.visibleItems.size % 2 != 0) {
             throw OddMenuItemsException()
@@ -233,18 +239,19 @@ class FoldingTabBar : LinearLayout {
      * In case if you need some custom sizes, please use them)
      */
     private fun resolveAdjustedSize(desiredSize: Int, measureSpec: Int): Int {
-        var result = desiredSize
         val specMode = View.MeasureSpec.getMode(measureSpec)
         val specSize = View.MeasureSpec.getSize(measureSpec)
-        when (specMode) {
+
+        return when (specMode) {
             View.MeasureSpec.UNSPECIFIED ->
-                result = desiredSize
+                desiredSize
             View.MeasureSpec.AT_MOST ->
-                result = Math.min(desiredSize, specSize)
+                Math.min(desiredSize, specSize)
             View.MeasureSpec.EXACTLY ->
-                result = specSize
+                specSize
+            else ->
+                desiredSize
         }
-        return result
     }
 
     /**
@@ -264,27 +271,26 @@ class FoldingTabBar : LinearLayout {
      * Here we are saving view state
      */
     override fun onSaveInstanceState(): Parcelable {
-        var superState = super.onSaveInstanceState()
-        val ss = SavedState(superState)
-        ss.selection = selectedIndex
-        return ss
+        val superState = super.onSaveInstanceState()
+        return SavedState(superState).apply {
+            selection = selectedIndex
+        }
     }
 
     /**
      * Here we are restoring view state (state, selection)
      */
     override fun onRestoreInstanceState(state: Parcelable?) {
-        val ss: SavedState = state as SavedState
-        super.onRestoreInstanceState(ss.superState)
-        selectedIndex = ss.selection
+        (state as SavedState).let {
+            super.onRestoreInstanceState(it.superState)
+            selectedIndex = it.selection
+        }
     }
 
-    val scaleAnimator: ValueAnimator.AnimatorUpdateListener = ValueAnimator.AnimatorUpdateListener {
-        valueAnimator ->
-        val value = valueAnimator.animatedValue as Int
-        val layoutParamsNew = layoutParams
-        layoutParams.width = value
-        layoutParams = layoutParamsNew
+    val scaleAnimator = ValueAnimator.AnimatorUpdateListener { valueAnimator ->
+        layoutParams = layoutParams.apply {
+            width = valueAnimator.animatedValue as Int
+        }
     }
 
     /**
@@ -307,32 +313,33 @@ class FoldingTabBar : LinearLayout {
      * that you are using e.g in NavigationView or any kind of native menus
      */
     private fun initAndAddMenuItem(menuItem: MenuItemImpl): SelectedMenuItem {
-        val imageView = SelectedMenuItem(context, selectionColor)
-        imageView.setImageDrawable(menuItem.icon)
-        imageView.layoutParams = ViewGroup.LayoutParams(mSize, mSize)
-        imageView.setPadding(itemsPadding, itemsPadding, itemsPadding, itemsPadding)
-        imageView.visibility = View.GONE
-        imageView.isActivated = menuItem.isChecked
-        addView(imageView, indexCounter)
+        return SelectedMenuItem(context, selectionColor).apply {
+            setImageDrawable(menuItem.icon)
+            layoutParams = ViewGroup.LayoutParams(mSize, mSize)
+            setPadding(itemsPadding, itemsPadding, itemsPadding, itemsPadding)
+            visibility = View.GONE
+            isActivated = menuItem.isChecked
+            addView(this, indexCounter)
 
-        imageView.setOnClickListener {
-            onFoldingItemClickListener?.onFoldingItemSelected(menuItem) ?:
-                    Log.e("FoldingTabBar", "FoldingItemClickListener is null")
-            menuItem.isChecked = true
+            setOnClickListener {
+                onFoldingItemClickListener?.onFoldingItemSelected(menuItem) ?:
+                        Log.e("FoldingTabBar", "FoldingItemClickListener is null")
+                menuItem.isChecked = true
 
-            selectedImageView?.isActivated = false
-            selectedImageView = imageView
-            selectedIndex = indexOfChild(imageView)
-            animateMenu()
+                selectedImageView?.isActivated = false
+                selectedImageView = this
+                selectedIndex = indexOfChild(this)
+                animateMenu()
+            }
+
+            indexCounter++
         }
-
-        indexCounter++
-        return imageView
     }
 
     fun select(position: Int) {
-        selectedImageView = getChildAt(position) as SelectedMenuItem
-        selectedImageView?.isActivated = true
+        selectedImageView = (getChildAt(position) as SelectedMenuItem).apply {
+            isActivated = true
+        }
     }
 
 
