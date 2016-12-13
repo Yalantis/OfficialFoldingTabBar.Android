@@ -31,6 +31,11 @@ log*.txt
 *.tar
 *.zip
 
+#idea
+*.idea
+*.iml
+out/
+
 # eclipse
 *.metadata
 *.settings

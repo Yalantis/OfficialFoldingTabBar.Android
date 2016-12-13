@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+
+    <client.yalantis.com.foldingtabbarandroid.CustomFontTextView
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:text="Chats"
+        android:textSize="18sp"
+        android:textColor="@android:color/white"
+        app:font="сode_pro_bold.otf"
+        android:layout_height="50dp"/>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view_chats"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

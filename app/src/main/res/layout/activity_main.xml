@@ -9,18 +9,40 @@
     android:background="@color/colorAccent"
     tools:context="client.yalantis.com.foldingtabbarandroid.MainActivity">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewPager"
+    <FrameLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </android.support.v4.view.ViewPager>
+    </FrameLayout>
 
     <client.yalantis.com.foldingtabbar.FoldingTabBar
         android:id="@+id/folding_tab_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/activity_horizontal_margin"
-        android:layout_centerInParent="true"
         android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
         app:menu="@menu/menu_tab_bar"/>
+
+    <ImageView
+        android:background="@drawable/background_additional_buttons"
+        android:layout_width="@dimen/ftb_size_mini"
+        android:layout_height="@dimen/ftb_size_mini"
+        android:layout_alignTop="@+id/folding_tab_bar"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="90dp"
+        android:padding="10dp"
+        android:src="@drawable/ic_search_icon"
+        android:layout_toRightOf="@+id/folding_tab_bar"/>
+
+    <ImageView
+        android:background="@drawable/background_additional_buttons"
+        android:layout_marginRight="90dp"
+        android:layout_width="@dimen/ftb_size_mini"
+        android:layout_height="@dimen/ftb_size_mini"
+        android:layout_alignTop="@+id/folding_tab_bar"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:src="@drawable/ic_new_chat_icon"
+        android:layout_toLeftOf="@+id/folding_tab_bar"/>
 </RelativeLayout>

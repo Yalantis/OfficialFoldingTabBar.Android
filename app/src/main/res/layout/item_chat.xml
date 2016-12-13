@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/color_chat_item">
+
+    <client.yalantis.com.foldingtabbarandroid.CustomFontTextView
+        android:id="@+id/text_view_chat_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/image_view_chat"
+        android:layout_marginTop="10dp"
+        android:textSize="18sp"
+        android:textColor="@color/color_chat_user_name"
+        android:layout_toRightOf="@+id/image_view_chat"
+        app:font="code_pro_lc.otf"/>
+
+    <client.yalantis.com.foldingtabbarandroid.CustomFontTextView
+        android:id="@+id/text_view_last_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text_view_chat_name"
+        android:layout_below="@+id/text_view_chat_name"
+        android:layout_marginTop="10dp"
+        android:textColor="@android:color/white"
+        app:font="proxima_nova_regular.otf"/>
+
+    <client.yalantis.com.foldingtabbarandroid.CustomFontTextView
+        android:id="@+id/text_view_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_margin="5dp"
+        android:textColor="@color/color_small_text"
+        android:layout_alignParentTop="true"
+        app:font="proxima_nova_regular.otf"/>
+
+    <ImageView
+        android:id="@+id/image_view_chat"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:adjustViewBounds="true"
+        android:src="@drawable/ic_img_chat_one"/>
+
+    <View
+        android:background="@color/colorAccent"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_height="1dp"/>
+
+</RelativeLayout>
