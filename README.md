@@ -34,7 +34,7 @@ dependencies {
 ```
 ## How to use this library
 
-1. Create menu.xml for your menu
+* Create menu.xml for your menu
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
@@ -60,7 +60,7 @@ dependencies {
 
 </menu>
 ```
-2. Add FoldingTabBar into your layout
+* Add FoldingTabBar into your layout
 ```xml
 <RelativeLayout
     android:id="@+id/activity_main"
@@ -87,13 +87,13 @@ dependencies {
     
 </RelativeLayout>
 ```
-3. Initialize it in your java/kotlin code
+* Initialize it in your java/kotlin code
 ```java
 FoldingTabBar tabBar = (FoldingTabBar) findViewById(R.id.folding_tab_bar);
 ```
 
 ## Features
-1. We have useful callbacks for you - 
+* We have useful callbacks for you - 
    Handle menu items clicks:
 ```java
     tabBar.setOnFoldingItemClickListener(new FoldingTabBar.OnFoldingItemSelectedListener() {
@@ -112,7 +112,7 @@ FoldingTabBar tabBar = (FoldingTabBar) findViewById(R.id.folding_tab_bar);
             }
         });
  ```
- 2. Attributes for customizing FoldingTabBar:
+ * Attributes for customizing FoldingTabBar:
 
 Name | Description |
 --- | --- | ---
