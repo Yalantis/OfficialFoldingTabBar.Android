@@ -8,20 +8,20 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="250dp"
+        android:layout_width="@dimen/profile_image_width"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/additional_button_top_margin"
         android:adjustViewBounds="true"
         android:src="@drawable/man_on_bike"/>
 
     <client.yalantis.com.foldingtabbarandroid.CustomFontTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/additional_button_top_margin"
         android:gravity="center"
         android:textSize="20sp"
         android:textColor="@color/color_chat_user_name"
-        android:text="Brian Forza"
+        android:text="@string/brian_forza"
         app:font="code_pro_lc.otf"/>
 
     <client.yalantis.com.foldingtabbarandroid.CustomFontTextView
@@ -30,7 +30,7 @@
         android:layout_margin="5dp"
         android:gravity="center"
         android:textColor="@color/color_small_text"
-        android:text="21, London"
+        android:text="@string/london"
         app:font="proxima_nova_regular.otf"/>
 
     <client.yalantis.com.foldingtabbarandroid.CustomFontTextView
@@ -39,7 +39,7 @@
         android:layout_marginTop="30dp"
         android:gravity="center"
         android:textColor="@color/color_small_text"
-        android:text="Photographer, biker, father and overall \nsuper cool dude. Cheers!"
+        android:text="@string/message"
         app:font="proxima_nova_regular.otf"/>
 
 </LinearLayout>

@@ -12,8 +12,7 @@
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </FrameLayout>
+        android:layout_height="match_parent"/>
 
     <client.yalantis.com.foldingtabbar.FoldingTabBar
         android:id="@+id/folding_tab_bar"
@@ -29,20 +28,20 @@
         android:layout_width="@dimen/ftb_size_mini"
         android:layout_height="@dimen/ftb_size_mini"
         android:layout_alignTop="@+id/folding_tab_bar"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="90dp"
-        android:padding="10dp"
+        android:layout_marginTop="@dimen/additional_button_top_margin"
+        android:layout_marginLeft="@dimen/additional_button_margin"
+        android:padding="@dimen/additional_button_top_margin"
         android:src="@drawable/ic_search_icon"
         android:layout_toRightOf="@+id/folding_tab_bar"/>
 
     <ImageView
         android:background="@drawable/background_additional_buttons"
-        android:layout_marginRight="90dp"
+        android:layout_marginRight="@dimen/additional_button_margin"
         android:layout_width="@dimen/ftb_size_mini"
         android:layout_height="@dimen/ftb_size_mini"
         android:layout_alignTop="@+id/folding_tab_bar"
-        android:layout_marginTop="10dp"
-        android:padding="10dp"
+        android:layout_marginTop="@dimen/additional_button_top_margin"
+        android:padding="@dimen/additional_button_top_margin"
         android:src="@drawable/ic_new_chat_icon"
         android:layout_toLeftOf="@+id/folding_tab_bar"/>
 </RelativeLayout>

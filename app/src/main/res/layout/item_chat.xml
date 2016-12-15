@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/image_view_chat"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/additional_button_top_margin"
         android:textSize="18sp"
         android:textColor="@color/color_chat_user_name"
         android:layout_toRightOf="@+id/image_view_chat"
@@ -38,8 +38,8 @@
 
     <ImageView
         android:id="@+id/image_view_chat"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="@dimen/chat_image_size"
+        android:layout_height="@dimen/chat_image_size"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:adjustViewBounds="true"

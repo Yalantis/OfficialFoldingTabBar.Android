@@ -1,9 +1,7 @@
 package client.yalantis.com.foldingtabbarandroid;
 
 import android.app.Fragment;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
@@ -12,8 +10,6 @@ import org.jetbrains.annotations.NotNull;
 import client.yalantis.com.foldingtabbar.FoldingTabBar;
 
 public class MainActivity extends AppCompatActivity {
-
-    private int[] mColors = {Color.BLACK, Color.BLUE, Color.RED, Color.CYAN};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

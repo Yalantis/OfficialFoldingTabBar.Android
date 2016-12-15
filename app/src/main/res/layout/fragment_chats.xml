@@ -10,10 +10,10 @@
         android:layout_width="match_parent"
         android:gravity="center"
         android:text="Chats"
-        android:textSize="18sp"
+        android:textSize="@dimen/toolbar_text_size"
         android:textColor="@android:color/white"
         app:font="сode_pro_bold.otf"
-        android:layout_height="50dp"/>
+        android:layout_height="@dimen/toolbar_height"/>
 
 
     <android.support.v7.widget.RecyclerView
