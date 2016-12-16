@@ -34,14 +34,4 @@
         android:src="@drawable/ic_search_icon"
         android:layout_toRightOf="@+id/folding_tab_bar"/>
 
-    <ImageView
-        android:background="@drawable/background_additional_buttons"
-        android:layout_marginRight="@dimen/additional_button_margin"
-        android:layout_width="@dimen/ftb_size_mini"
-        android:layout_height="@dimen/ftb_size_mini"
-        android:layout_alignTop="@+id/folding_tab_bar"
-        android:layout_marginTop="@dimen/additional_button_top_margin"
-        android:padding="@dimen/additional_button_top_margin"
-        android:src="@drawable/ic_new_chat_icon"
-        android:layout_toLeftOf="@+id/folding_tab_bar"/>
 </RelativeLayout>

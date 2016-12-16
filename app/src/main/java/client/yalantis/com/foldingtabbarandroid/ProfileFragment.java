@@ -36,7 +36,10 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
                 v.removeOnLayoutChangeListener(this);
-                animateRevealColorFromCoordinates((ViewGroup) view, right / 2, bottom);
+                int currentApiVersion = android.os.Build.VERSION.SDK_INT;
+                if (currentApiVersion >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    animateRevealColorFromCoordinates((ViewGroup) view, right / 2, bottom);
+                }
             }
         });
     }

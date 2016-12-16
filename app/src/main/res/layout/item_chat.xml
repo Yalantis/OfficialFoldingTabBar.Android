@@ -14,7 +14,7 @@
         android:textSize="18sp"
         android:textColor="@color/color_chat_user_name"
         android:layout_toRightOf="@+id/image_view_chat"
-        app:font="code_pro_lc.otf"/>
+        app:font="code_pro_title.otf"/>
 
     <client.yalantis.com.foldingtabbarandroid.CustomFontTextView
         android:id="@+id/text_view_last_message"
