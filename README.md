@@ -4,17 +4,12 @@
 [![Yalantis](https://raw.githubusercontent.com/Yalantis/PullToRefresh/develop/PullToRefreshDemo/Resources/badge_dark.png)](https://yalantis.com/?utm_source=github)
 
 Folding Tab Bar and Tab Bar Menu
+<img src="content_tab_bar_animation_fin-02.gif" width="800" height="600">
 
-Inspired by [our project on Dribbble](https://dribbble.com/shots/2003376-Tab-Bar-Animation)
-
-Read how we did it [on our blog](https://yalantis.com/blog/foldingtabbar-for-android/)
-
-![Preview](https://d13yacurqjgara.cloudfront.net/users/495792/screenshots/2003376/tab_bar_animation_fin-02.gif)
-
-##Requirements
+## Requirements
 - Android SDK 19+
 
-##Usage
+## Usage
 
 Add to your root build.gradle:
 ```Groovy
@@ -34,7 +29,7 @@ dependencies {
 ```
 ## How to use this library
 
-* Create menu.xml for your menu
+It’s very simple. On Android we have the @menu resource type. We can think of FoldingTabBar as a solution that provides folding menu effect. Let’s create our menu file:
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
@@ -60,7 +55,9 @@ dependencies {
 
 </menu>
 ```
-* Add FoldingTabBar into your layout
+Looks good. This is the menu that you’re using for dialogs, toolbar menus, or the navigation drawer. The coolest thing is that you can easily switch from the navigation drawer to our FoldingTabBar. Or you can use both menus simultaneously on the same screen; not all Android action bars have that flexibility.
+
+ Here’s an example of how you can implement our FoldingTabBar into your layout file:
 ```xml
 <RelativeLayout
     android:id="@+id/activity_main"
@@ -87,23 +84,46 @@ dependencies {
     
 </RelativeLayout>
 ```
-* Initialize it in your java/kotlin code
+Initialize it in your java/kotlin code
 ```java
 FoldingTabBar tabBar = (FoldingTabBar) findViewById(R.id.folding_tab_bar);
 ```
 
-## Features
-* We have useful callbacks for you - 
-   Handle menu items clicks:
+As you can see, we have some custom attributes. The main and required attribute is app:menu – here you can link your menu file to our component.
+There are also some additional attributes:
+
+*app:itemPadding* - sets padding for your menu items. Default item padding is 17dp.  
+*app:mainImage* - here you can link your image resource for the main image.  
+*app:selectionColor* - our menu supports color selection. You can change the menu’s color here.
+
+Our menu is flexible, so you can use wrap_content or hard-coded sizes. When you’re using wrap_content, the size will equal 70dp.
+
+## How to use our FoldingTabBar in Java code
+
+Here we have two interfaces. The first works when your menu item is pressed:
 ```java
-    tabBar.setOnFoldingItemClickListener(new FoldingTabBar.OnFoldingItemSelectedListener() {
-            @Override
-            public boolean onFoldingItemSelected(@NotNull MenuItem item) {
-                return false;
+	tabBar.setOnFoldingItemClickListener(new FoldingTabBar.OnFoldingItemSelectedListener() {
+            	@Override
+            	public boolean onFoldingItemSelected(@NotNull MenuItem item) {
+                	switch (item.getItemId()) {
+                   	 case R.id.ftb_menu_nearby:
+                        	mViewPager.setCurrentItem(0);
+                        	break;
+                    	case R.id.ftb_menu_new_chat:
+                        	mViewPager.setCurrentItem(1);
+                        	break;
+                    	case R.id.ftb_menu_profile:
+                        	mViewPager.setCurrentItem(2);
+                        	break;
+                    	case R.id.ftb_menu_settings:
+                        	mViewPager.setCurrentItem(3);
+                        	break;
+                	}
+                	return false;
             }
         });
- ```
- and one more to handle main button clicks:
+```
+The second works when a user presses the home button:
  ```java
       tabBar.setOnMainButtonClickListener(new FoldingTabBar.OnMainButtonClickedListener() {
             @Override
@@ -112,16 +132,69 @@ FoldingTabBar tabBar = (FoldingTabBar) findViewById(R.id.folding_tab_bar);
             }
         });
  ```
- * Attributes for customizing FoldingTabBar:
+We created two interfaces instead of one because this corresponds with the Interface Segregation principle (from SOLID).
 
-Name | Description |
---- | --- | ---
-*app:itemPadding* | sets padding for your menu items. Default item padding is 17dp.
-*app:mainImage* | here you can link your image resource for the main image. 
-*app:selectionColor* | our menu supports color selection. You can change the menu’s color here.
+## Technology stack
  
+We chose Kotlin as the language for our library. We already have a few components in Kotlin; we love Kotlin because it’s a powerful language that makes it much more fun to develop apps than Java does. It was a good fit for Android action bar development.
     
+## Collections
 
+Here we’re using some functional “magic” of Kotlin collections:  
+```kotlin
+	mData = mMenu.visibleItems.map {
+            initAndAddMenuItem(it)
+        }
+```
+Also, note that we’ve used forEach instead of for loops.
+
+## Null Safety
+
+This fantastic feature of Kotlin is used everywhere across our library (where needed, of course). Now our code is much cleaner and more understandable.
+
+## Lambda functions
+
+We’ve only had this feature in Java since version 8. But Java 8 is not yet ready for Android. In Kotlin we have this feature by default.  
+```kotlin
+	rotationAnimator.addUpdateListener {
+            valueAnimator ->
+            val value = valueAnimator.animatedValue as Float
+            mainImageView.rotation = value
+        }
+```
+Really beautiful, isn’t it?
+
+## Apply function
+
+The apply function defines an extension function for all types. When you invoke the apply function, it calls the closure passed as a parameter and then returns the receiver object that the closure ran on. This is an amazing feature!
+```kotlin
+	val scalingAnimator = ValueAnimator.ofInt(mSize, destWidth).apply {
+            addUpdateListener(scaleAnimator)
+            addListener(rollUpListener)
+        }
+```
+
+## Animations
+
+We’re using different ValueAnimators and, of course, AnimationSets for playing our animators together. Obviously, we made our own interpolator:
+
+```kotlin
+internal class CustomBounceInterpolator(val amplitude: Double = 0.1,
+                                        val frequency: Double = 0.8) : Interpolator {
+ 
+    override fun getInterpolation(time: Float): Float {
+        return (-1.0 * Math.exp(-time / amplitude) *
+                Math.cos(frequency * time) + 1).toFloat()
+    }
+}
+```
+Enjoy! :)
+
+Also check out:
+
+Kotlin vs Java: [basic syntax differences](https://yalantis.com/blog/kotlin-vs-java-syntax/)
+
+We constantly work on various open-source elements of navigation bar or styling tabs, and focus on providing high-quality open-source libraries for various purposes.
 
 ## Let us know!
 
